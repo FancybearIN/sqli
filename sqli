@@ -2,7 +2,11 @@
 
 # Function to display a colorful banner
 display_banner () {
+    echo ""
+    echo ""
+    echo ""
     figlet "SQLMAP AUTOMATION" | lolcat
+
     echo "NoBoDY HiDe fRoM mE!" | lolcat
     echo ""
     echo "@Deepak                                                            @binwalk" | lolcat
@@ -15,71 +19,113 @@ display_banner () {
 # Array of tamper scripts
 tampers=('apostrophemask' 'apostrophenullencode' 'base64encode' 'between' 'bluecoat' 'chardoubleencode' 'charencode' 'charunicodeencode' 'concat2concatws' 'equaltolike' 'greatest' 'halfversionedmorekeywords' 'ifnull2ifisnull' 'modsecurityversioned' 'modsecurityzeroversioned' 'multiplespaces' 'nonrecursivereplacement' 'percentage' 'randomcase' 'randomcomments' 'securesphere' 'space2comment' 'space2dash' 'space2hash' 'space2morehash' 'space2mssqlblank' 'space2mysqldash' 'space2plus' 'space2randomblank' 'unionalltounion' 'unmagicquotes')
 
+# Function to display help message
+display_help () {
+    echo "Usage: $0 [options]"
+    echo ""
+    echo "Options:"
+    echo "  -h, --help                Show this help message and exit"
+    echo "  -u, --url URL/FILE        Specify a single URL or a file containing URLs"
+    echo "  -d, --dbms DBMS           Specify the DBMS (default: mysql)"
+    echo ""
+    echo "Attack Types:"
+    echo "  Injection-based          Perform injection-based attacks"
+    echo "  File-based               Perform file-based attacks"
+    echo "  Blind-based              Perform blind-based attacks"
+    echo "  Brute-based              Perform brute-based attacks"
+    echo "  Time-based               Perform time-based attacks"
+    echo "  Error-based              Perform error-based attacks"
+    echo "  Out-of-band              Perform out-of-band attacks"
+    echo "  Bayekar                  Perform all attacks on a single target"
+    echo "  Database Detection       Perform database detection"
+    echo ""
+    exit 0
+}
+
 # Function to perform SQL injection attacks
 perform_attack () {
-    local attack_type=$1
-    local options=$2
-    
-    for tamper in "${tampers[@]}"; do
+    attack_type=$1
+    options=$2
+    url_or_file=$3
+    dbms=$4
+
+    index=0
+
+    # Determine if the input is a single URL or a file
+    if [[ -f "$url_or_file" ]]; then
+        target_option="-m $url_or_file"
+    else
+        target_option="-u $url_or_file"
+    fi
+
+    # While loop to iterate through tamper scripts
+    while [ $index -lt ${#tampers[@]} ]; do
+        tamper=${tampers[$index]}
         echo "##################################" | lolcat
         echo "$tamper" | lolcat
         echo "##################################" | lolcat
-        sqlmap -m "$urls" --dbms="$dbms" --level=5 --risk=3 --threads=5 --batch $options --tamper="$tamper" --alert="Vulnerability Found"
+        sqlmap $target_option --dbms="$dbms" --level=5 --risk=3 --threads=5 --batch $options --tamper="$tamper" --alert="Vulnerability Found"
+        
+        # Increment the counter
+        index=$((index + 1))
     done
 }
 
 # Function to select the type of attack to perform
 select_attack () {
+    url_or_file=$1
+    dbms=$2
+
     select attack in "Injection-based" "File-based" "Blind-based" "Brute-based" "Time-based" "Error-based" "Out-of-band" "Bayekar" "Database Detection"; do
         case $attack in
             "Injection-based" )
                 echo "(+) Injection Attacks..." | lolcat
-                perform_attack "injection" "--dbs"
+                perform_attack "injection" "--dbs" "$url_or_file" "$dbms"
                 break
                 ;;
             "File-based" )
                 echo "(+) File Based Attacks..." | lolcat
-                perform_attack "file" "--dbs"
+                perform_attack "file" "--dbs" "$url_or_file" "$dbms"
                 break
                 ;;
             "Blind-based" )
                 echo "(+) Blind Based Attack..." | lolcat
-                perform_attack "blind" "--dbms-cred"
+                perform_attack "blind" "--dbms-cred" "$url_or_file" "$dbms"
                 break
                 ;;
             "Brute-based" )
                 echo "(+) Brute Based Attacks..." | lolcat
-                perform_attack "brute" "--users --passwords"
+                perform_attack "brute" "--users --passwords" "$url_or_file" "$dbms"
                 break
                 ;;
             "Time-based" )
                 echo "(+) Time Based Attacks..." | lolcat
-                perform_attack "time" "--time-sec=5 --dbs"
+                perform_attack "time" "--time-sec=5 --dbs" "$url_or_file" "$dbms"
                 break
                 ;;
             "Error-based" )
                 echo "(+) Error Based Attacks..." | lolcat
-                perform_attack "error" "--errors"
+                perform_attack "error" "--errors" "$url_or_file" "$dbms"
                 break
                 ;;
             "Out-of-band" )
                 echo "(+) Out Of Band Attacks..." | lolcat
-                perform_attack "oob" "--file-write='/tmp/data.txt'"
+                perform_attack "oob" "--file-write='/tmp/data.txt'" "$url_or_file" "$dbms"
                 break
                 ;;
             "Bayekar" )
                 echo "(+) All attacks on a single target..." | lolcat
                 echo "WARNING! This may take up to 14 hours." | lolcat
-                perform_attack "bayekar" "--dbs"
-                perform_attack "bayekar" "--users --passwords"
-                perform_attack "bayekar" "--time-sec=5 --dbs"
-                perform_attack "bayekar" "--errors"
-                perform_attack "bayekar" "--file-write='/tmp/data.txt'"
+                perform_attack "bayekar" "--dbs" "$url_or_file" "$dbms"
+                perform_attack "bayekar" "--users --passwords" "$url_or_file" "$dbms"
+                perform_attack "bayekar" "--time-sec=5 --dbs" "$url_or_file" "$dbms"
+                perform_attack "bayekar" "--errors" "$url_or_file" "$dbms"
+                perform_attack "bayekar" "--file-write='/tmp/data.txt'" "$url_or_file" "$dbms"
                 break
                 ;;
             "Database Detection" )
                 echo "(+) Database Detection Start..." | lolcat
-                perform_attack "database" "--banner"
+                perform_attack "database" "--banner" "$url_or_file" "$dbms"
                 continue
                 ;;
             * )
@@ -118,13 +164,43 @@ create_folders () {
 
 # Main script execution
 main () {
-    urls=$1
-    dbms=$2
-    
+    # Parse options
+    while [[ "$#" -gt 0 ]]; do
+        case $1 in
+            -h|--help)
+                display_help
+                ;;
+            -u|--url)
+                url_or_file="$2"
+                shift
+                ;;
+            -d|--dbms)
+                dbms="$2"
+                shift
+                ;;
+            *)
+                echo "Unknown parameter passed: $1"
+                display_help
+                ;;
+        esac
+        shift
+    done
+
+    # Prompt the user for the URL or file if not provided
+    if [[ -z "$url_or_file" ]]; then
+        read -p "Enter the URL or file path: " url_or_file
+    fi
+
+    # Prompt the user for the DBMS if not provided, default to "mysql"
+    if [[ -z "$dbms" ]]; then
+        read -p "Enter the DBMS (default: mysql): " dbms
+        dbms=${dbms:-mysql}
+    fi
+
     create_folders
     install_tools
     display_banner
-    select_attack
+    select_attack "$url_or_file" "$dbms"
 }
 
 # Run the main function with provided arguments
