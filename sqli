@@ -9,7 +9,7 @@ display_banner () {
 
     echo "NoBoDY HiDe fRoM mE!" | lolcat
     echo ""
-    echo "@Deepak                                                            @binwalk" | lolcat
+    echo "@Deepak                        @Nidhi                        @binwalk" | lolcat
     echo ""
     echo "WARNING!!!" | lolcat
     echo "Nobody takes responsibility for your actions. Always seek permission." | lolcat
@@ -199,8 +199,9 @@ main () {
 
     create_folders
     install_tools
-    display_banner
+    #display_banner
     select_attack "$url_or_file" "$dbms"
+    display_banner
 }
 
 # Run the main function with provided arguments
