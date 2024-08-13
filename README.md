@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 ```markdown
+=======
+>>>>>>> dfe24cf9472013d8f1780356dca1cdd0103eda46
 # SQLMAP Automation Script
 
 ## Overview
